@@ -1,0 +1,17 @@
+language: csharp
+mono: latest
+dist: xenial
+sudo: required
+dotnet: 7.0.100
+solution: QuickbooksSync.sln
+install:
+  - dotnet restore
+  - nuget install NUnit.ConsoleRunner -Version 3.16.0 -OutputDirectory testrunner
+script:
+  - dotnet build --configuration Release ./src/QbXml/QbXml.csproj
+  - dotnet build --configuration Release --no-restore ./test/QbXml.Tests/QbXml.Tests.csproj
+  - dotnet build --configuration Release ./src/WebConnector/WebConnector.csproj
+  - dotnet build --configuration Release ./test/WebConnector.Tests/WebConnector.Tests.csproj
+  - dotnet build --configuration Release ./src/XsdGenerator/XsdGenerator.csproj
+  - dotnet test --configuration Release --no-build ./test/QbXml.Tests/QbXml.Tests.csproj
+  - dotnet test --configuration Release --no-build ./test/WebConnector.Tests/WebConnector.Tests.csproj
